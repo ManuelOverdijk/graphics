@@ -57,8 +57,8 @@ void PutPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
 
 
 void DrawFigure(SDL_Surface *screen) {
-  // int i, mid_x=screen->w/2, mid_y=screen->h/2, size=100;
-  int x0 = 100, x1 = 200, y0 = 100, y1 = 90;
+  int i, mid_x=screen->w/2, mid_y=screen->h/2, size=100;
+  // int x0 = 100, x1 = 200, y0 = 100, y1 = 90;
 
   Uint32 colour;
 
@@ -72,30 +72,30 @@ void DrawFigure(SDL_Surface *screen) {
     }
   }
 
-  // for(i=0; i<32; i++) {
-  //   /* Set drawing colour */
-  //   switch((i>>2) % 4) {
-  //     case 0:
-  //       colour=SDL_MapRGB(screen->format,0xFF,0,0);
-  //       break;
-  //     case 1:
-  //       colour=SDL_MapRGB(screen->format,0,0xFF,0);
-  //       break;
-  //     case 2:
-  //       colour=SDL_MapRGB(screen->format,0,0,0xFF);
-  //       break;
-  //     case 3:
-  //       colour=SDL_MapRGB(screen->format,0xFF,0xFF,0xFF);
-  //       break;
-  //   }
-  //   /* draw a line */
-  //   mla(screen, mid_x, mid_y, 
-  //       (int)roundf(size*cos(2*M_PI/32*i))+mid_x, 
-  //       (int)roundf(size*sin(2*M_PI/32*i))+mid_y, colour);
-  // }
+  for(i=0; i<32; i++) {
+    /* Set drawing colour */
+    switch((i>>2) % 4) {
+      case 0:
+        colour=SDL_MapRGB(screen->format,0xFF,0,0);
+        break;
+      case 1:
+        colour=SDL_MapRGB(screen->format,0,0xFF,0);
+        break;
+      case 2:
+        colour=SDL_MapRGB(screen->format,0,0,0xFF);
+        break;
+      case 3:
+        colour=SDL_MapRGB(screen->format,0xFF,0xFF,0xFF);
+        break;
+    }
+    /* draw a line */
+    mla(screen, mid_x, mid_y, 
+        (int)roundf(size*cos(2*M_PI/32*i))+mid_x, 
+        (int)roundf(size*sin(2*M_PI/32*i))+mid_y, colour);
+  }
 
     /* draws a red line between (100,100) and (200,90) */
-  mla(screen, x0, y0, x1, y1, colour);
+  // mla(screen, x0, y0, x1, y1, colour);
 
 
   /* It would be more efficient to call SDL_UpdateRect(), but I do not really
