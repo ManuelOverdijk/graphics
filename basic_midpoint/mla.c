@@ -34,27 +34,28 @@
  *
  */
 void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
-  int ix,iy;
-  int x,y;
+  // int ix,iy;
+  // int x,y;
   
-  PutPixel(s,x0,y0,colour);
-  PutPixel(s,x1,y1,colour);
+  // PutPixel(s,x0,y0,colour);
+  // PutPixel(s,x1,y1,colour);
   
-  if(x1>x0) {
-    ix=1; 
-  }  else {
-     ix=-1;
-  }
-
-  for(x=x0; x!=x1; x+=ix) {
-    PutPixel(s,x,y0,colour);
-  }
+  // if(x1>x0) ix=1; else ix=-1;
+  // for(x=x0;x!=x1;x+=ix)
+  //   PutPixel(s,x,y0,colour);
   
-  if(y1>y0) iy=1; else iy=-1;
-  for(y=y0;y!=y1;y+=iy)
-    PutPixel(s,x1,y,colour);
+  // if(y1>y0) iy=1; else iy=-1;
+  // for(y=y0;y!=y1;y+=iy)
+  //   PutPixel(s,x1,y,colour);
 
-
+    int w = x1 - x0 ;
+    int h = y1 - y0;
+    double m = h/(double)w ;
+    double j = y0 ;
+    for (int i=x0;i<=x1;i++) {
+        PutPixel(s,i,(int)j,colour);
+        j += m ;
+    }
 
   return;
 }

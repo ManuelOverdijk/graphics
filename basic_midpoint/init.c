@@ -57,8 +57,13 @@ void PutPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
 
 
 void DrawFigure(SDL_Surface *screen) {
-  int i, mid_x=screen->w/2, mid_y=screen->h/2, size=100;
+  // int i, mid_x=screen->w/2, mid_y=screen->h/2, size=100;
+  int x0 = 100, x1 = 200, y0 = 100, y1 = 90;
+
   Uint32 colour;
+
+  colour=SDL_MapRGB(screen->format,0xFF,0,0);
+
 
 
   if(SDL_MUSTLOCK(screen)) {
@@ -83,20 +88,15 @@ void DrawFigure(SDL_Surface *screen) {
   //       colour=SDL_MapRGB(screen->format,0xFF,0xFF,0xFF);
   //       break;
   //   }
+  //   /* draw a line */
+  //   mla(screen, mid_x, mid_y, 
+  //       (int)roundf(size*cos(2*M_PI/32*i))+mid_x, 
+  //       (int)roundf(size*sin(2*M_PI/32*i))+mid_y, colour);
+  // }
 
-    /* draw a line */
+    /* draws a red line between (100,100) and (200,90) */
+  mla(screen, x0, y0, x1, y1, colour);
 
-  //int x0, int y0, int x1, int y1,
-  colour=SDL_MapRGB(screen->format,0xFF,0xFF,0xFF);
-  
-  mla(screen, 100, 100, 
-    200, 
-    90, colour);
-
-    // mla(screen, mid_x, mid_y, 
-    //     (int)roundf(size*cos(2*M_PI/32*i))+mid_x, 
-    //     (int)roundf(size*sin(2*M_PI/32*i))+mid_y, colour);
- // }
 
   /* It would be more efficient to call SDL_UpdateRect(), but I do not really
    * care.
