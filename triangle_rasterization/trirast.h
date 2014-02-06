@@ -11,6 +11,9 @@ void    draw_triangle_optimized(float x0, float y0, float x1, float y1,
 float f01(float x0,float x1,float y0,float y1,float x,float y);
 float f12(float x1,float y1,float x2,float y2,float x,float y);
 float f20(float x0,float y0,float x2,float y2,float x,float y);
+float min(float var1, float var2);
+float max(float var1, float var2);
+
 
 
 
