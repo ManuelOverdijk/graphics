@@ -26,6 +26,12 @@
 #define ROTATE_ONLY_X	1
 #define ROTATE_ONLY_Z	2
 
+ /* ANSI C/ISO C89 does not specify this constant (?) */
+#ifndef M_PI
+#define M_PI           3.14159265358979323846  /* pi */
+#endif
+
+
 int     window;
 float   x_rotation=0.0, z_rotation=0.0;
 int     prev_mouse_x, prev_mouse_y;
@@ -59,8 +65,11 @@ void ReSizeGLScene(int Width, int Height)
     glMatrixMode(GL_MODELVIEW);
 }
 
-void drawRotatedTeapot(float rotx, float roty, float rotz)
+void drawRotatedTeapot(float rotx, float roty, float rotz, float xas)
 {
+    //translate x,y,z
+    glTranslatef(xas, 0, 0);
+
     glRotatef(rotx, 1.0, 0.0, 0.0);
     glRotatef(roty, 0.0, 1.0, 0.0);
     glRotatef(rotz, 0.0, 0.0, 1.0);
@@ -95,13 +104,15 @@ void drawRotatedTeapot(float rotx, float roty, float rotz)
     glEnd();
 }
 
-void drawTeapots(void)
+void drawTeapots()
 {
     /* This function is called from DrawGLScene() below */
 
     glPushMatrix();
 
-    drawRotatedTeapot(x_rotation, 0.0, z_rotation);
+    drawRotatedTeapot(x_rotation, 0.0, z_rotation, 0);
+    drawRotatedTeapot(x_rotation, 45 * (M_PI/180), z_rotation, 5);
+    drawRotatedTeapot(x_rotation, 90 * (M_PI/180), z_rotation, 5);
 
     glPopMatrix();
 }
