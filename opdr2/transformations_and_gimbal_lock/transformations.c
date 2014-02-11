@@ -27,9 +27,9 @@ void myScalef(GLfloat x, GLfloat y, GLfloat z)
 {
     GLfloat M[16] =
     {
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
+        x, 0.0, 0.0, 0.0,
+        0.0, y, 0.0, 0.0,
+        0.0, 0.0, z, 0.0,
         0.0, 0.0, 0.0, 1.0
     };
 
@@ -41,14 +41,40 @@ void myTranslatef(GLfloat x, GLfloat y, GLfloat z)
 {
     GLfloat M[16] =
     {
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
+        1, 0.0, 0.0, 0.0,
+        0.0, 1, 0.0, 0.0,
+        0.0, 0.0, 1, 0.0,
+        x, y, z, 1.0
     };
 
     glMultMatrixf(M);
 }
+
+// Calculate the crossproduct of a and b, returing it in out
+void crossProduct(GLfloat a[3], GLfloat b[3], GLfloat *out)
+{
+        out[0] = a[1]*b[2]-a[2]*b[1];
+        out[1] = a[2]*b[0]-a[0]*b[2];
+        out[2] = a[0]*b[1]-a[1]*b[0];
+}
+
+// Calculate the dotproduct of two vectors, returning a float
+GLfloat inProduct(GLfloat a[3], GLfloat b[3])
+{
+    return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+}
+
+// Divide each element of the vector by the total length, thus normalizing it
+void normalize(GLfloat *a)
+{
+    int i = 0;
+    GLfloat len = sqrt(dotProduct(a, a));
+    for(; i < 3; i++)
+    {
+        a[i] /= len;
+    }
+}
+
 
 void myRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
