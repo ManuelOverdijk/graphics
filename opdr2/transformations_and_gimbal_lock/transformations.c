@@ -68,7 +68,7 @@ GLfloat inProduct(GLfloat a[3], GLfloat b[3])
 void normalize(GLfloat *a)
 {
     int i = 0;
-    GLfloat len = sqrt(dotProduct(a, a));
+    GLfloat len = sqrt(inProduct(a, a));
     for(; i < 3; i++)
     {
         a[i] /= len;
@@ -79,24 +79,61 @@ void normalize(GLfloat *a)
 void myRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
     GLfloat u[3], v[3], w[3], t[3];
+    GLfloat temp;
+    GLfloat radians;
 
     //
     // 1. Create the orthonormal basis
     //
 
     // Store the incoming rotation axis in w and normalize w
+    w[0] = x;
+    w[1] = y;
+    w[2] = z;
+    normalize(w);
 
     // Compute the value of t, based on w
+    t[0] = w[0];
+    t[1] = w[1];
+    t[2] = w[2];
+
+    //change smallest magnetude component
+    if (t[0] < t[1] && t[0] < t[2]) {
+        //t[0] is smallest
+        t[0] = 1;
+    }
+    else if (t[1] < t[0] && t[1] < t[2]) {
+        //t[1] is smallest
+        t[1] = 1;
+    }
+    else {
+        //t[2] is smallest
+        t[2] = 1;
+    }
 
     // Compute u = t x w
+    crossProduct(t, w, u);
 
     // Normalize u
+    normalize(u);
 
     // Compute v = w x u
+    crossProduct(w,u,v);
 
     // At this point u, v and w should form an orthonormal basis.
     // If your routine does not seem to work correctly it might be
     // a good idea to the check the vector values.
+
+    /* Uncomment for debugging */
+    
+    //temp = inProduct(u,v);
+    //printf("inProduct from u,v = %f \n",temp);
+    //temp = inProduct(u,u);
+    //printf("inProduct from u,u = %f \n",temp);
+    //temp = inProduct(v,v);
+    //printf("inProduct from v,v = %f \n",temp);
+    //temp = inProduct(w,w);
+    //printf("inProduct from w,w = %f \n",temp);
 
     //
     // 2. Set up the three matrices making up the rotation
@@ -106,32 +143,33 @@ void myRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 
     GLfloat A[16] =
     {
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
+        u[0], u[1], u[2], 0.0,
+        v[0], v[1], v[2], 0.0,
+        w[0], w[1], w[2], 0.0,
+        0.0,  0.0,  0.0,  1.0
     };
 
     // Convert 'angle' to radians
+    radians = angle * (M_PI/180);
 
     // Specify matrix B
 
-    GLfloat B[16] =
+   GLfloat B[16] =
     {
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
+        cos(radians), sin(radians),   0.0, 0.0,
+        -sin(radians), cos(radians),  0.0, 0.0,
+        0.0,       0.0,       1.0, 0.0,
+        0.0,       0.0,       0.0, 1.0
     };
 
     // Specify matrix C
 
     GLfloat C[16] =
     {
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
+        u[0], v[0], w[0], 0.0,
+        u[1], v[1], w[1], 0.0,
+        u[2], v[2], w[2], 0.0,
+        0.0,  0.0,  0.0,  1.0
     };
 
     //

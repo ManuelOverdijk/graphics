@@ -12,6 +12,9 @@
 void myScalef(GLfloat x, GLfloat y, GLfloat z);
 void myTranslatef(GLfloat x, GLfloat y, GLfloat z);
 void myRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z);
+void crossProduct(GLfloat a[3], GLfloat b[3], GLfloat *out);
+GLfloat inProduct(GLfloat a[3], GLfloat b[3]);
+void normalize(GLfloat *a);
 
 
 #endif
