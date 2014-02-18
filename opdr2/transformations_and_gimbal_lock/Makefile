@@ -1,6 +1,6 @@
 CC=gcc
 
-WARNING_FLAGS=-Wall -Wextra -Werror-implicit-function-declaration -Wshadow -Wstrict-prototypes -pedantic-errors
+WARNING_FLAGS=-w
 CFLAGS=-O2 -std=c99 $(WARNING_FLAGS)
 LDFLAGS=-lGL -lglut -lGLU -lm
 #LDFLAGS=-lglut -lglu -lgl

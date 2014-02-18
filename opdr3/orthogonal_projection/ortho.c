@@ -34,6 +34,7 @@ void myOrtho(GLdouble left,
              GLdouble near,
              GLdouble far) {
 
+<<<<<<< HEAD
 /* left, right
 Specify the coordinates for the left and right vertical clipping planes. */
 
@@ -44,7 +45,16 @@ Specify the coordinates for the bottom and top horizontal clipping planes. */
 Specify the distances to the nearer and farther depth clipping planes. These values are negative if the plane is to be behind the viewer. */
 
 //GLdouble 
+=======
+GLdouble M[16] = {
+    2.0 / (right - left) , 0 , 0 , 0,
+    0 , 2.0 / (top - bottom) , 0 , 0,
+    0 , 0 ,  2.0 / (near - far)  , 0,
+    -(right+left)/(right-left), -(top+bottom)/(top-bottom), -(near+far)
+        /(near-far), 1
+};
+>>>>>>> d1423ffcdd89360b9190e58276d1047babae32db
 
-
+glMultMatrixd(&M[0]);
 
 }

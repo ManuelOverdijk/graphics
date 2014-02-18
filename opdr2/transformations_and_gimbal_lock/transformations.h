@@ -16,5 +16,4 @@ void crossProduct(GLfloat a[3], GLfloat b[3], GLfloat *out);
 GLfloat inProduct(GLfloat a[3], GLfloat b[3]);
 void normalize(GLfloat *a);
 
-
 #endif

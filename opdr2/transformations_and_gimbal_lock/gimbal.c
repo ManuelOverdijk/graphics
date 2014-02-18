@@ -4,10 +4,10 @@
  * Description ..... Draw teapots that can be interactively rotated with the mouse
  * Created by ...... Paul Melis
  *
- * Student name ....
- * Student email ...
- * Collegekaart ....
- * Date ............
+ * Student name Manuel Overdijk, Youp Uylings
+ * Student email manuel.overdijk@gmail.com, juylings@hotmail.com
+ * Collegekaart 10374582, 6129536
+ * Date 14/02/2014
  * Comments ........
  *
  *
@@ -111,18 +111,10 @@ void drawTeapots()
     glPushMatrix();
 
     drawRotatedTeapot(x_rotation, 0.0, z_rotation, 0);
-    glPopMatrix();
-
-    glPushMatrix();
-    drawRotatedTeapot(x_rotation, 45, z_rotation, 5);
-    glPopMatrix();
-
-    glPushMatrix();
-    drawRotatedTeapot(x_rotation, 90, z_rotation, 10);
+    drawRotatedTeapot(x_rotation, 45 * (M_PI/180), z_rotation, 5);
+    drawRotatedTeapot(x_rotation, 90 * (M_PI/180), z_rotation, 5);
 
     glPopMatrix();
-
-    
 }
 
 void DrawGLScene(void)
