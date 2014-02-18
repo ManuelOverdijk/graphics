@@ -4,11 +4,11 @@
  * Date ............ 22.07.2009
  * Created by ...... Paul Melis
  *
- * Student name ....
- * Student email ...
- * Collegekaart ....
- * Date ............
- * Comments ........
+ * Student name: Manuel Overdijk & Youp Uylings
+ * Student email: manuel.overdijk@gmail.com, juylings@hotmail.com
+ * Collegekaart: 10374582, 6129536
+ * Date: 18/02/2014
+ * Comments: ........
  *
  *
  * (always fill in these fields before submitting!!)
@@ -27,41 +27,46 @@
  */
 
 
-GLfloat binomial(GLint n, GLint k) {
+GLfloat bern_poly(GLint n, GLint k, GLfloat u) {
+	/* first calculated the binomial distribution */
 	int nk = n - k;
 
+	/* n! */
     GLint value_n = 1;
     for (GLint i = 2; i <= n; i++) {
-        value_n *= i;
-    }
+        value_n *= i;}
 
+    /* k! */
     GLint value_k = 1;    
     for (GLint i = 2; i <= k; i++) {
     value_k *= i;}
 
+    /* ( n - k ) ! */
     GLint n_min_k = 1;    
     for (GLint i = 2; i <= nk; i++) {
-    n_min_k *= i;    
-    }
-    return value_n / ((GLfloat) value_k * n_min_k);
-}
+    n_min_k *= i;}
 
-/* Calculate the ith Bernstein polynomial of degree n
- */
-GLfloat bernstein(GLint n, GLint k, GLfloat u) {
-    return binomial(n, k) * pow(u, k) * pow(1 - u, n - k);
+    /* calculated binominal distribution */
+    GLfloat binomial_distribution = value_n / ((GLfloat) value_k * n_min_k);
+	/* calculated the ith Bernstein polynomial of degree n */
+    return binomial_distribution * pow(u, k) * pow(1 - u, n - k);
 }
 
 void
 evaluate_bezier_curve(GLfloat *x, GLfloat *y, control_point p[], GLint num_points, GLfloat u)
 {
+	/* initializing values */
     *x = 0.0;
     *y = 0.0;
 
-        for (GLint i = 0; i < num_points; i++) {
-        GLfloat bern = bernstein(num_points - 1, i, u);
-        *x += bern * p[i].x;
-        *y += bern * p[i].y;
+    /*  
+     * calculates a bezier curve P(u) of arbitrary degree n by multiplying the control ax-points
+     * with the bernstein polynomial 
+     */
+    for (GLint i = 0; i < num_points; i++) {
+        GLfloat bernstein = bern_poly(num_points - 1, i, u);
+        *x += bernstein * p[i].x;
+        *y += bernstein * p[i].y;
     }
 }
 

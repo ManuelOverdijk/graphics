@@ -11,9 +11,7 @@ typedef struct control_point
 }
 control_point;
 
-int factorial(int n);
-float binomial(int n, int k);
-float bernstein(int n, int i, float u);
+GLfloat bern_poly(GLint n, GLint k, GLfloat u);
 
 
 void    evaluate_bezier_curve(float *x, float *y, control_point p[], int num_points, float u);
