@@ -111,10 +111,18 @@ void drawTeapots()
     glPushMatrix();
 
     drawRotatedTeapot(x_rotation, 0.0, z_rotation, 0);
-    drawRotatedTeapot(x_rotation, 45 * (M_PI/180), z_rotation, 5);
-    drawRotatedTeapot(x_rotation, 90 * (M_PI/180), z_rotation, 5);
+    glPopMatrix();
+
+    glPushMatrix();
+    drawRotatedTeapot(x_rotation, 45, z_rotation, 5);
+    glPopMatrix();
+
+    glPushMatrix();
+    drawRotatedTeapot(x_rotation, 90, z_rotation, 10);
 
     glPopMatrix();
+
+    
 }
 
 void DrawGLScene(void)

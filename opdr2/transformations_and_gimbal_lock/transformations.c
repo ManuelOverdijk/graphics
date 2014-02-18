@@ -50,7 +50,7 @@ void myTranslatef(GLfloat x, GLfloat y, GLfloat z)
     glMultMatrixf(M);
 }
 
-// Calculate the crossproduct of a and b, returing it in out
+
 void crossProduct(GLfloat a[3], GLfloat b[3], GLfloat *out)
 {
         out[0] = a[1]*b[2]-a[2]*b[1];
@@ -58,13 +58,13 @@ void crossProduct(GLfloat a[3], GLfloat b[3], GLfloat *out)
         out[2] = a[0]*b[1]-a[1]*b[0];
 }
 
-// Calculate the dotproduct of two vectors, returning a float
+
 GLfloat inProduct(GLfloat a[3], GLfloat b[3])
 {
     return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
 }
 
-// Divide each element of the vector by the total length, thus normalizing it
+
 void normalize(GLfloat *a)
 {
     int i = 0;
@@ -149,7 +149,7 @@ void myRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
         0.0,  0.0,  0.0,  1.0
     };
 
-    // Convert 'angle' to radians
+    
     radians = angle * (M_PI/180);
 
     // Specify matrix B
