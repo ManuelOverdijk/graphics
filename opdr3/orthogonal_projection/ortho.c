@@ -26,7 +26,7 @@
 #define M_PI           3.14159265358979323846  /* pi */
 #endif
 
-/* Youp See  https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml */
+/* Bron  https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml */
 void myOrtho(GLdouble left,
              GLdouble right,
              GLdouble bottom,
@@ -34,12 +34,33 @@ void myOrtho(GLdouble left,
              GLdouble near,
              GLdouble far) {
 
+
+/* left, right
+Specify the coordinates for the left and right vertical clipping planes. */
+
+/* bottom, top
+Specify the coordinates for the bottom and top horizontal clipping planes. */
+
+/* nearVal, farVal
+Specify the distances to the nearer and farther depth clipping planes. These values are negative if the plane is to be behind the viewer. */
+
+/* myOrtho describes a transformation that produces a parallel projection. */
+
+GLfloat tx, ty, tz;
+
+tx = -(right+left)/(right-left);
+ty = -(top+bottom)/(top-bottom);
+tz = -(near+far)/(near-far);
+
 GLdouble M[16] = {
-    2.0 / (right - left) , 		0 , 						0 , 					0,
-    0 , 						2.0 / (top - bottom) , 		0 , 					0,
-    0 , 						0 ,  						2.0 / (near - far)  , 	0,
-    -(right+left)/(right-left), -(top+bottom)/(top-bottom), -(near+far)/(near-far), 1
+
+    2.0 / (right - left) , 0 , 0 , 0,
+    0 , 2.0 / (top - bottom) , 0 , 0,
+    0 , 0 ,  2.0 / (near - far)  , 0,
+    tx, -ty, tz, 1
+
 };
+
 
 glMultMatrixd(&M[0]);
 
