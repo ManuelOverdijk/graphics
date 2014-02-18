@@ -5,10 +5,10 @@
  * Date ............ 01.09.2006
  * Created by ...... Jurgen Sturm 
  *
- * Student name ....
- * Student email ... 
- * Collegekaart ....
- * Date ............
+ * Student name .... Manuel Overdijk & Youp Uylings	
+ * Student email ... manuel.overdijk@gmail.com & juylings@hotmail.com
+ * Collegekaart .... 10374582 & 6129536
+ * Date ............ 18 Feb 2014
  * Comments ........
  *
  *
@@ -26,11 +26,15 @@
 #define M_PI           3.14159265358979323846  /* pi */
 #endif
 
+/* Youp See  https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml */
 void myOrtho(GLdouble left,
              GLdouble right,
              GLdouble bottom,
              GLdouble top,
              GLdouble near,
              GLdouble far) {
+
+
+
 
 }
