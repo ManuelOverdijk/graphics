@@ -41,7 +41,7 @@ GLfloat bern_poly(GLint n, GLint k, GLfloat u) {
     for (GLint i = 2; i <= k; i++) {
     value_k *= i;}
 
-    /* ( n - k ) ! */
+    /* ( n - k )! */
     GLint n_min_k = 1;    
     for (GLint i = 2; i <= nk; i++) {
     n_min_k *= i;}
@@ -96,19 +96,19 @@ draw_bezier_curve(GLint num_segments, control_point p[], GLint num_points)
 {
 
     GLfloat x, y;
-
     glBegin(GL_LINE_STRIP);
 
-    // start line
+    /* begin point */
     glVertex2f(p[0].x, p[0].y);
 
     // calculate and draw points in the middle
     for (GLint i = 1; i < num_segments; i++) {
-        evaluate_bezier_curve(&x, &y, p, num_points, i / (GLfloat) num_segments);
+    	GLfloat curve_parameter = i / (GLfloat) num_segments;
+        evaluate_bezier_curve(&x, &y, p, num_points, curve_parameter);
         glVertex2f(x, y);
     }
 
-    // end line
+    /* end point */
     glVertex2f(p[num_points - 1].x, p[num_points - 1].y);
     glEnd();
 
