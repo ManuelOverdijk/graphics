@@ -209,7 +209,7 @@ ray_trace(void)
             us = left + (right - left)*((i + 0.5)/nx);
             vs = bottom + (top - bottom)*((j + 0.5)/ny);
 
-            //calculate orthogonal basis u,v,w;
+            //user up, right and forward vector as orthogonal vector u,v,w
 
             vec3 multi_1 = v3_multiply(right_vector,us);
             vec3 multi_2 = v3_multiply(up_vector,vs);
