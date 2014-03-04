@@ -29,6 +29,7 @@
 
 float max(float a, float b);
 
+/* berekend max waarde */
 float max(float a, float b)
 {
     if(a > b)
