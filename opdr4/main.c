@@ -184,19 +184,10 @@ ray_trace(void)
     image_plane_height = 2.0 * tan(0.5*VFOV/180*M_PI);
     image_plane_width = image_plane_height * (1.0 * framebuffer_width / framebuffer_height);
 
-<<<<<<< HEAD
-    /* als aangegeven in de slide matrix */
-    float top, right, buttom, left, Vs, Us;
-    top = -image_plane_height/2.0;
-    right = image_plane_width/2.0;
-    buttom = image_plane_height/2.0;
-    left = -image_plane_width/2.0;
-=======
-    float pixelwidth, pixelheight;
-    pixelwidth = image_plane_width / framebuffer_width;
-    pixelheight = image_plane_height / framebuffer_height;
 
-    float top, left, right, bottom;
+    /* als aangegeven in de slide matrix */
+    float top, right, bottom, left, Vs, Us;
+
     top =  -image_plane_height * 0.5;
     left = -image_plane_width * 0.5;
     right = image_plane_width * 0.5;
@@ -206,7 +197,7 @@ ray_trace(void)
 
     nx = framebuffer_width;
     ny = framebuffer_height;
->>>>>>> 07844e286d321bbeb7448c8e04a180b800f400cf
+
 
 
     // Loop over all pixels in the framebuffer
@@ -214,10 +205,10 @@ ray_trace(void)
     {
         for (i = 0; i < framebuffer_width; i++)
         {
-<<<<<<< HEAD
-                Us = left + ((right-left)*(i+0.5)/framebuffer_width);
-		        Vs = buttom + ((top-buttom)*(j+0.5)/framebuffer_height);
 
+                Us = left + ((right-left)*(i+0.5)/framebuffer_width);
+		        Vs = bottom + ((top-bottom)*(j+0.5)/framebuffer_height);
+		        
 		        vec3 W_temp = v3_multiply(up_vector, Vs);
 		        vec3 V_temp = v3_multiply(right_vector, Us);
 
@@ -226,21 +217,21 @@ ray_trace(void)
                 /* Initialize and fill the color */
                 // color = v3_create(0, 0, 0);
                 color = ray_color(0, scene_camera_position, s);
-=======
 
-            us = left + (right - left)*((i + 0.5)/nx);
-            vs = bottom + (top - bottom)*((j + 0.5)/ny);
 
-            //user up, right and forward vector as orthogonal vector u,v,w
+            // us = left + (right - left)*((i + 0.5)/nx);
+            // vs = bottom + (top - bottom)*((j + 0.5)/ny);
 
-            vec3 multi_1 = v3_multiply(right_vector,us);
-            vec3 multi_2 = v3_multiply(up_vector,vs);
-            vec3 ray = v3_add(multi_1, multi_2);
-            ray = v3_add(forward_vector,ray);
+            // //user up, right and forward vector as orthogonal vector u,v,w
 
-            // ray_color(int level, vec3 ray_origin, vec3 ray_direction);
-            vec3 color = ray_color(0,scene_camera_position, ray);
->>>>>>> 07844e286d321bbeb7448c8e04a180b800f400cf
+            // vec3 multi_1 = v3_multiply(right_vector,us);
+            // vec3 multi_2 = v3_multiply(up_vector,vs);
+            // vec3 ray = v3_add(multi_1, multi_2);
+            // ray = v3_add(forward_vector,ray);
+
+            // // ray_color(int level, vec3 ray_origin, vec3 ray_direction);
+            // vec3 color = ray_color(0,scene_camera_position, ray);
+
 
 	            put_pixel(i, j, color.x, color.y, color.z);
         }

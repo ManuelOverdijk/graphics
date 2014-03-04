@@ -73,7 +73,27 @@ shade_matte(intersection_point ip)
 vec3
 shade_blinn_phong(intersection_point ip)
 {
-    return v3_create(1, 0, 0);
+    float intensity = 0.0, Ks = 0.5, Kd = 0.8, alpha = 50, phong = 0;
+    vec3 cs = v3_create(1,1,1), cd = v3_create(1,0,0), halfway_point, shade_matte, phong_formula;
+    for(int i = 0; i < scene_num_lights; i++)
+    {
+        /* berekend vector Li, de richting naar lichtbron */
+        vec3 Li = v3_normalize(v3_subtract(scene_lights[i].position,ip.p));
+
+        /* the hoek van de lichtbron t.o.v. object */
+        float dot_ipn_Li = v3_dotprod(ip.n, Li);
+
+        /* kijkt of er schaduw is */
+        if(!shadow_check(v3_add(ip.p, v3_multiply(ip.n, 0.001)), Li))
+        {
+            intensity += scene_lights[i].intensity * max(0, dot_ipn_Li);
+        }
+        halfway_point = v3_normalize(v3_add(ip.i, Li));
+        phong += scene_lights[i].intensity * pow(v3_dotprod(ip.n,halfway_point), alpha);
+    }
+    shade_matte = v3_multiply(cd, (Kd * intensity));
+    phong_formula = v3_multiply(cs, (Ks * phong));
+    return v3_add(shade_matte, phong_formula);
 }
 
 vec3
