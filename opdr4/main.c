@@ -1,9 +1,9 @@
 /* Computer Graphics and Game Technology, Assignment Ray-tracing
  *
- * Student name ....
- * Student email ...
- * Collegekaart ....
- * Date ............
+ * Student name  Manuel Overdijk & Youp Uylings 
+ * Student email manuel.overdijk@gmail.com & Juylings@hotmail.com
+ * Collegekaart  10374582 & 
+ * Date 04 Maart 2014
  * Comments ........
  *
  *
@@ -184,18 +184,40 @@ ray_trace(void)
     image_plane_height = 2.0 * tan(0.5*VFOV/180*M_PI);
     image_plane_width = image_plane_height * (1.0 * framebuffer_width / framebuffer_height);
 
-    // ...
-    // ...
-    // ...
+    float pixelwidth, pixelheight;
+    pixelwidth = image_plane_width / framebuffer_width;
+    pixelheight = image_plane_height / framebuffer_height;
+
+    float top, left, right, bottom;
+    top =  -image_plane_height * 0.5;
+    left = -image_plane_width * 0.5;
+    right = image_plane_width * 0.5;
+    bottom = image_plane_height * 0.5;
+
+    float nx, ny, us, vs;
+
+    nx = framebuffer_width;
+    ny = framebuffer_height;
+
 
     // Loop over all pixels in the framebuffer
     for (j = 0; j < framebuffer_height; j++)
     {
         for (i = 0; i < framebuffer_width; i++)
         {
-            // ...
-            // ...
-            // ...
+
+            us = left + (right - left)*((i + 0.5)/nx);
+            vs = bottom + (top - bottom)*((j + 0.5)/ny);
+
+            //calculate orthogonal basis u,v,w;
+
+            vec3 multi_1 = v3_multiply(right_vector,us);
+            vec3 multi_2 = v3_multiply(up_vector,vs);
+            vec3 ray = v3_add(multi_1, multi_2);
+            ray = v3_add(forward_vector,ray);
+
+            // ray_color(int level, vec3 ray_origin, vec3 ray_direction);
+            vec3 color = ray_color(0,scene_camera_position, ray);
 
             // Output pixel color
             put_pixel(i, j, color.x, color.y, color.z);
