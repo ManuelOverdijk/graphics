@@ -184,21 +184,32 @@ ray_trace(void)
     image_plane_height = 2.0 * tan(0.5*VFOV/180*M_PI);
     image_plane_width = image_plane_height * (1.0 * framebuffer_width / framebuffer_height);
 
-    // ...
-    // ...
-    // ...
+    /* als aangegeven in de slide matrix */
+    float top, right, buttom, left, Vs, Us;
+    top = -image_plane_height/2.0;
+    right = image_plane_width/2.0;
+    buttom = image_plane_height/2.0;
+    left = -image_plane_width/2.0;
+
 
     // Loop over all pixels in the framebuffer
     for (j = 0; j < framebuffer_height; j++)
     {
         for (i = 0; i < framebuffer_width; i++)
         {
-            // ...
-            // ...
-            // ...
+                Us = left + ((right-left)*(i+0.5)/framebuffer_width);
+		        Vs = buttom + ((top-buttom)*(j+0.5)/framebuffer_height);
 
-            // Output pixel color
-            put_pixel(i, j, color.x, color.y, color.z);
+		        vec3 W_temp = v3_multiply(up_vector, Vs);
+		        vec3 V_temp = v3_multiply(right_vector, Us);
+
+                vec3 s = v3_add(forward_vector, v3_add(V_temp, W_temp));
+
+                /* Initialize and fill the color */
+                // color = v3_create(0, 0, 0);
+                color = ray_color(0, scene_camera_position, s);
+
+	            put_pixel(i, j, color.x, color.y, color.z);
         }
 
         sprintf(buf, "Ray-tracing ::: %.0f%% done", 100.0*j/framebuffer_height);

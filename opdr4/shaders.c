@@ -27,6 +27,20 @@
 // based on normal, light position, etc. As such, it merely creates
 // a "silhouette" of an object.
 
+float max(float a, float b);
+
+float max(float a, float b)
+{
+    if(a > b)
+    {
+      return a;
+    }
+    else
+    {
+      return b;
+    }
+}
+
 vec3
 shade_constant(intersection_point ip)
 {
@@ -36,7 +50,23 @@ shade_constant(intersection_point ip)
 vec3
 shade_matte(intersection_point ip)
 {
-    return v3_create(1, 0, 0);
+    float intensity = 0.0;
+    for(int i = 0; i < scene_num_lights; i++)
+    {
+        /* berekend vector Li, de richting naar lichtbron */
+        vec3 Li = v3_normalize(v3_subtract(scene_lights[i].position,ip.p));
+
+        /* the hoek van de lichtbron t.o.v. object */
+        float dot_ipn_Li = v3_dotprod(ip.n, Li);
+
+        /* kijkt of er schaduw is */
+        if(!shadow_check(v3_add(ip.p, v3_multiply(ip.n, 0.001)), Li))
+        {
+            intensity += scene_lights[i].intensity * max(0, dot_ipn_Li);
+        }
+    }
+    intensity = scene_ambient_light + intensity;
+    return v3_create(intensity,intensity,intensity);
 }
 
 vec3
