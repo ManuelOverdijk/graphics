@@ -99,7 +99,23 @@ shade_blinn_phong(intersection_point ip)
 vec3
 shade_reflection(intersection_point ip)
 {
-    return v3_create(1, 0, 0);
+    vec3 r = v3_normalize(v3_subtract(v3_multiply(ip.n, v3_dotprod(ip.i, ip.n) * 2), ip.i));
+
+    vec3 matte_shading = shade_matte(ip);
+
+    vec3 result = v3_add(ray_color(ip.ray_level + 1, v3_add(ip.p, v3_multiply(ip.n, 0.0001)), r), result);
+
+    float x = 0.75 * matte_shading.x + 0.25 * result.x;
+    float y = 0.75 * matte_shading.y + 0.25 * result.y;
+    float z = 0.75 * matte_shading.z + 0.25 * result.z;
+    //vec3 r = 2 * 
+
+    // matte 75%
+    // 25% refelection
+    //color c = c + kmraycolor(p + sr, ε, ∞)
+    //r = 2n(i · n) − i;
+
+    return v3_create(x, y, z);
 }
 
 // Returns the shaded color for the given point to shade.
