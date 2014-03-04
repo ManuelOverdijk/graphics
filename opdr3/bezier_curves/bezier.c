@@ -94,7 +94,6 @@ evaluate_bezier_curve(GLfloat *x, GLfloat *y, control_point p[], GLint num_point
 void
 draw_bezier_curve(GLint num_segments, control_point p[], GLint num_points)
 {
-
     GLfloat x, y;
     glBegin(GL_LINE_STRIP);
 
@@ -111,18 +110,29 @@ draw_bezier_curve(GLint num_segments, control_point p[], GLint num_points)
     /* end point */
     glVertex2f(p[num_points - 1].x, p[num_points - 1].y);
     glEnd();
-
 }
 
-/* Find the intersection of a cubic Bezier curve with the line X=x.
-   Return 1 if an intersection was found and place the corresponding y
-   value in *y.
-   Return 0 if no intersection exists.
-*/
+int intersect_cubic_bezier_curve(GLfloat *y_line, control_point p[], GLfloat x_line){
+	GLfloat x_cubic = 0, y_cubic = 0, difference, interval = 0.0001;
 
-int
-intersect_cubic_bezier_curve(float *y, control_point p[], float x)
-{
-    return 0;
+	/* within the range of points */
+	if(x_line >= p[0].x && x_line <= p[3].x) {
+		for(GLfloat curve_parameter = 0; curve_parameter <= 1; curve_parameter += interval){
+			/* if the curve parameter <= 1 calculate bezier_curve */
+			evaluate_bezier_curve(&x_cubic, &y_cubic, p, 4, curve_parameter);
+			
+			/* 
+			 * Return 1 if an intersection was found and place the corresponding y
+   			 * value in *y.
+   			 */
+			difference = x_cubic - x_line;
+			if(difference >= -interval && difference <= interval){
+				*y_line = y_cubic;
+				return 1;
+			}
+		}
+	}
+	/* Return 0 if no intersection exists. */
+	return 0;
 }
 
