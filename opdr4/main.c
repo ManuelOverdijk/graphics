@@ -185,7 +185,7 @@ ray_trace(void)
     image_plane_width = image_plane_height * (1.0 * framebuffer_width / framebuffer_height);
 
 
-    /* als aangegeven in de slide matrix */
+    /* pixel die correspondeert met view window */
     float top, right, bottom, left, Vs, Us;
 
     top =  -image_plane_height * 0.5;
@@ -198,42 +198,34 @@ ray_trace(void)
     nx = framebuffer_width;
     ny = framebuffer_height;
 
-
-
     // Loop over all pixels in the framebuffer
     for (j = 0; j < framebuffer_height; j++)
     {
         for (i = 0; i < framebuffer_width; i++)
         {
-
-                Us = left + ((right-left)*(i+0.5)/framebuffer_width);
+        	if(!do_antialiasing)
+        	{
+        		/* Us = l + (r−l) * ((i+ 0.5) / nx); */
+	            Us = left + ((right-left)*(i+0.5)/framebuffer_width);
+        		/* Us = b + (t−b) * ((j+ 0.5) / ny); */
 		        Vs = bottom + ((top-bottom)*(j+0.5)/framebuffer_height);
-		        
-		        vec3 W_temp = v3_multiply(up_vector, Vs);
-		        vec3 V_temp = v3_multiply(right_vector, Us);
 
-                vec3 s = v3_add(forward_vector, v3_add(V_temp, W_temp));
+		        /* s = Us * U + Vs * v + n * w */
+		        vec3 V_temp = v3_multiply(up_vector, Vs);
+		        vec3 U_temp = v3_multiply(right_vector, Us);
+		        vec3 UplusV = v3_add(U_temp, V_temp);
+	            vec3 s = v3_add(forward_vector, UplusV);
 
-                /* Initialize and fill the color */
-                // color = v3_create(0, 0, 0);
-                color = ray_color(0, scene_camera_position, s);
+	            /* Fills the color */
+	            color = ray_color(0, scene_camera_position, s);
 
-
-            // us = left + (right - left)*((i + 0.5)/nx);
-            // vs = bottom + (top - bottom)*((j + 0.5)/ny);
-
-            // //user up, right and forward vector as orthogonal vector u,v,w
-
-            // vec3 multi_1 = v3_multiply(right_vector,us);
-            // vec3 multi_2 = v3_multiply(up_vector,vs);
-            // vec3 ray = v3_add(multi_1, multi_2);
-            // ray = v3_add(forward_vector,ray);
-
-            // // ray_color(int level, vec3 ray_origin, vec3 ray_direction);
-            // vec3 color = ray_color(0,scene_camera_position, ray);
-
-
+	            /* Puts the pixels */
 	            put_pixel(i, j, color.x, color.y, color.z);
+	        }
+	        else
+	        {
+	        	
+	        }
         }
 
         sprintf(buf, "Ray-tracing ::: %.0f%% done", 100.0*j/framebuffer_height);
