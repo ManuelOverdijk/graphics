@@ -186,7 +186,7 @@ ray_trace(void)
 
 
     /* pixel die correspondeert met view window */
-    float top, right, bottom, left, Vs, Us;
+    float top, right, bottom, left, Vs, Us, Us1, Us2, Vs1, Vs2;
 
     top =  -image_plane_height * 0.5;
     left = -image_plane_width * 0.5;
@@ -203,7 +203,31 @@ ray_trace(void)
     {
         for (i = 0; i < framebuffer_width; i++)
         {
-        	if(!do_antialiasing)
+       		if(do_antialiasing)
+	        {
+	            Us1 = left + ((right-left)*(i+0.25)/framebuffer_width);
+	        	Us2 = left + ((right-left)*(i+0.75)/framebuffer_width);
+		        Vs1 = bottom + ((top-bottom)*(j+0.25)/framebuffer_height);
+	        	Vs2 = bottom + ((top-bottom)*(j+0.75)/framebuffer_height);
+
+		        vec3 V_temp1 = v3_multiply(up_vector, Vs1);
+		        vec3 U_temp1 = v3_multiply(right_vector, Us1);
+		        vec3 V_temp2 = v3_multiply(up_vector, Vs2);
+		        vec3 U_temp2 = v3_multiply(right_vector, Us2);
+
+		        vec3 UplusV1 = v3_add(U_temp1, V_temp1);
+		        vec3 UplusV2 = v3_add(U_temp2, V_temp2);
+
+	            vec3 s1 = v3_add(forward_vector, UplusV1);
+	            vec3 s2 = v3_add(forward_vector, UplusV2);
+
+	            color = ray_color(0, scene_camera_position, s1);
+	            color = v3_add(color, ray_color(0, scene_camera_position, s2));
+	            color = v3_multiply(color, 0.5);
+
+	            put_pixel(i, j, color.x, color.y, color.z);
+	        }
+        	else
         	{
         		/* Us = l + (r−l) * ((i+ 0.5) / nx); */
 	            Us = left + ((right-left)*(i+0.5)/framebuffer_width);
@@ -221,10 +245,6 @@ ray_trace(void)
 
 	            /* Puts the pixels */
 	            put_pixel(i, j, color.x, color.y, color.z);
-	        }
-	        else
-	        {
-	        	
 	        }
         }
 
