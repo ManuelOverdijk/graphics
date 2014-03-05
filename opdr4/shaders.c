@@ -112,7 +112,10 @@ shade_reflection(intersection_point ip)
     vec3 matte_shading = shade_matte(ip);
 
     /* berekend reflecterende kleur */
-    vec3 color = v3_add(ray_color(ip.ray_level + 1, v3_add(ip.p, v3_multiply(ip.n, 0.1)), r), color);
+    vec3 ipn = v3_multiply(ip.n, 0.1);
+    vec3 addip_p_n = v3_add(ip.p, ipn);
+    vec3 reflect_rays = ray_color(ip.ray_level + 1, addip_p_n, r);
+    vec3 color = v3_add(reflect_rays, color);
 
     /* berekend shade reflection met de bijbehorende verhoudingen */
     vec3 reflection = v3_create((0.75 * matte_shading.x + 0.25 * color.x), (0.75 * matte_shading.y + 0.25 * color.y), (0.75 * matte_shading.z + 0.25 * color.z));
