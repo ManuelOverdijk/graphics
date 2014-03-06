@@ -239,114 +239,25 @@ recursive_traversel(intersection_point* ip,
     }
 
     if (leftnode && rightnode) {
-        intersection_point *ip1 = malloc(sizeof(intersection_point)), 
-                           *ip2 = malloc(sizeof(intersection_point));
-        leftnode = recursive_traversel(ip1, ray_origin, ray_direction, left, left_min, left_max);
-        rightnode = recursive_traversel(ip2, ray_origin, ray_direction, right, right_min, right_max);
-        if(leftnode && rightnode)
-        {
-            if(ip1->t > ip2->t)
-                *ip = *ip2;
-            else    
-                *ip = *ip1;
-        }
-        else if(leftnode)
-            *ip = *ip1;
-        else if(rightnode)
-            *ip = *ip2;
-        return leftnode || rightnode;    
-        //find closet node
+        leftnode = recursive_traversel(ip, ray_origin, ray_direction, left, left_min, left_max);
+        rightnode = recursive_traversel(ip, ray_origin, ray_direction, right, right_min, right_max);
 
+        return leftnode || rightnode;
     }
-    else if (leftnode) {
+
+    if (leftnode) {
         recursive_traversel(ip, ray_origin, ray_direction, left, left_min, left_max);
+    
     }
     else if (rightnode) {
-        recursive_traversel(ip, ray_origin, ray_direction, right, right_min, right_max);
+       recursive_traversel(ip, ray_origin, ray_direction, right, right_min, right_max);
+       
     }
 
-    //nothing hit
+    //nothing hit, omg.
     return 0;
 }
-// static int
-// find_first_intersected_bvh_triangle(intersection_point* ip,
-//     vec3 ray_origin, vec3 ray_direction)
-// {
-//     // Check if the ray intersects the root box, and walk to the best
-//     // matching triangle recursively.
-//     bvh_node root = *bvh_root;
-//     float t0, t1;
-//     if(bbox_intersect(&t0, &t1, root.bbox, ray_origin, ray_direction, 0, INFINITY))
-//     {
-//         return bvh_traversal(root, ip, ray_origin, ray_direction, t0, t1);
-//     }  
-//     // The ray doesn't intersect anything. Damn.
-//     return 0;
-// }
 
-// int bvh_traversal(bvh_node node, intersection_point* ip, vec3 origin,
-//     vec3 direction, float t0, float t1)
-// {
-//     int left = 0, right = 0;
-//     bvh_node leftnode, rightnode;
-//     float tl_min, tl_max, tr_min, tr_max;
-
-//     // If the node is a leafnode, find the nearest matching triangle (if any)
-//     if(node.is_leaf)
-//     {
-//         int i, result = 0;
-//         triangle *boxtri;
-//         boxtri = leaf_node_triangles(&node);
-//         for(i = 0; i < leaf_node_num_triangles(&node); i++)
-//         {
-//             if(ray_intersects_triangle(ip, boxtri[i], origin, direction))
-//                 result = 1;
-//         }
-//         return result;
-//     }
-    
-//     // Check which of the two nodes will be intersected
-//     leftnode = *inner_node_left_child(&node);    
-//     rightnode = *inner_node_right_child(&node); 
-
-//     left = bbox_intersect(&tl_min, &tl_max, leftnode.bbox, origin, direction, t0, t1);    
-//     right = bbox_intersect(&tr_min, &tr_max, rightnode.bbox, origin, direction, t0, t1); 
-
-//     // If both nodes are intersected, look at them both and find which one of
-//     // them contains the nearest triangle
-//     if(left && right)
-//     {
-//         intersection_point *ip1 = malloc(sizeof(intersection_point)), 
-//                            *ip2 = malloc(sizeof(intersection_point));
-//         left = bvh_traversal(leftnode, ip1, origin, direction, tl_min, tl_max);
-//         right = bvh_traversal(rightnode, ip2, origin, direction, tr_min, tr_max);
-//         if(left && right)
-//         {
-//             if(ip1->t > ip2->t)
-//                 *ip = *ip2;
-//             else    
-//                 *ip = *ip1;
-//         }
-//         else if(left)
-//             *ip = *ip1;
-//         else if(right)
-//             *ip = *ip2;
-//         return left || right;    
-//     }
-//     // Find the closest triangle from the left node
-//     else if(left)
-//         return bvh_traversal(leftnode, ip, origin, direction, tl_min, tl_max);
-//     // Find the closest triangle from the right node
-//     else if(right)
-//         return bvh_traversal(rightnode, ip, origin, direction, tr_min, tr_max);
-//     // No intersection :(
-//     else
-//         return 0;
-// }
-
-// Returns the nearest hit of the given ray with objects in the scene
-// (either a sphere or a triangle).
-//
 // Returns 1 and sets the intersection point values if there
 // is an intersection, returns 0 otherwise.
 int
