@@ -225,28 +225,34 @@ void DrawVolumeAsIsosurface(void)
 
 void FillArrayWithIsosurface(void)
 {
-    triangle *triangles = malloc(6*2*sizeof(triangle));
-    int n, number_triangles = 0;
-    for (int z = 0; z < nz; z++)
-    {
-        for (int y = 0; y < ny; y++)
-        {
-            for (int x = 0; x < nx; x++)
-            {
-                n = generate_cell_triangles(triangles, get_cell(x, y, z), isovalue);
-                number_triangles += n; 
+    int n, total = 0;
+    vec3 tri_p, tri_n;
+    // Make room for 12 triangles
+    triangle *triangles = malloc(6 * 2 * sizeof(triangle));
 
-                for(int a = 0; a < n; a++)
-                {
-                    AddVertexToArray(triangles[a].p[0], triangles[a].p[1]);
-                    AddVertexToArray(triangles[a].p[1], triangles[a].p[2]);
-                    AddVertexToArray(triangles[a].p[2], triangles[a].p[0]);
+    for(int k = 0; k < nz - 1; k++) {
+        for(int j = 0; j < ny - 1; j++) {
+            for(int i = 0; i < nx - 1; i++) {
+                // For each cell generate the triangles
+                n = generate_cell_triangles(triangles, get_cell(i, j, k), isovalue);
+                
+                for (int i = 0; i < n; ++i) {
+                    for (int j = 0; j < 3; ++j) {
+                        tri_p = triangles[i].p[j];
+                        tri_n = triangles[i].n[j];
+
+                        AddVertexToArray(tri_p, tri_n);
+                    }
                 }
-                printf("Number of triangles drawn: %d\n", number_triangles);
+                
+                total += n;
             }
         }
     }
-
+    
+    printf("Num triangles generated for isosurface: %d\n", total);
+    
+    free(triangles);
 }
 
 void DrawScene(void)

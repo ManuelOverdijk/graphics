@@ -38,6 +38,25 @@ cell
 get_cell(int i, int j, int k)
 {
     cell c;
+
+    vec3 offset[8];
+    offset[0] = v3_create(0, 0, 0);
+    offset[1] = v3_create(1, 0, 0);
+    offset[2] = v3_create(0, 1, 0);
+    offset[3] = v3_create(1, 1, 0);
+    offset[4] = v3_create(0, 0, 1);
+    offset[5] = v3_create(1, 0, 1);
+    offset[6] = v3_create(0, 1, 1);
+    offset[7] = v3_create(1, 1, 1);
+
+    vec3 zero_point = v3_create(i,j,k);
+
+    for(int a = 0; a < 8; a++)
+    {
+        vec3 off_vector = v3_add(zero_point, offset[a]);
+        c.p[a] = off_vector;
+        c.value[a] = (double)volume[voxel2idx(off_vector.x, off_vector.y, off_vector.z)];
+    }
     return c;
 }
 
