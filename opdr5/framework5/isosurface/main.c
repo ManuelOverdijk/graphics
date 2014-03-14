@@ -236,10 +236,10 @@ void FillArrayWithIsosurface(void)
                 // For each cell generate the triangles
                 n = generate_cell_triangles(triangles, get_cell(i, j, k), isovalue);
                 
-                for (int i = 0; i < n; ++i) {
-                    for (int j = 0; j < 3; ++j) {
-                        tri_p = triangles[i].p[j];
-                        tri_n = triangles[i].n[j];
+                for (int x = 0; x < n; ++x) {
+                    for (int y = 0; y < 3; ++y) {
+                        tri_p = triangles[x].p[y];
+                        tri_n = triangles[x].n[y];
 
                         AddVertexToArray(tri_p, tri_n);
                     }
