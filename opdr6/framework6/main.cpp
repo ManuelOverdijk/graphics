@@ -19,7 +19,7 @@
 #include "levels.h"
 
 
-void drawCircle(unsigned int level);
+void drawCircle(b2CircleShape *circle, b2Vec2 position);
 
 
 
@@ -61,19 +61,19 @@ void load_world(unsigned int level)
     //create our b2World
     world = new b2World(gravity);
 
-    // //create a single static body
-    // b2BodyDef groundBodyDef;
-    // groundBodyDef.position.Set(0.0f, -10.0f);
-    // b2Body* groundBody = world.CreateBody(&groundBodyDef);
+    //create a single static body
+    b2BodyDef groundBodyDef;
+    groundBodyDef.position.Set(0.0f, -10.0f);
+    b2Body* groundBody = world->CreateBody(&groundBodyDef);
 
-    // b2PolygonShape groundBox;
-    // groundBox.SetAsBox(50.0f, 10.0f);
-    // groundBody->CreateFixture(&groundBox, 0.0f);
+    b2PolygonShape groundBox;
+    groundBox.SetAsBox(50.0f, 10.0f);
+    groundBody->CreateFixture(&groundBox, 0.0f);
     
     //create a single dynamic body
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(0.0f, 4.0f);
+    bodyDef.position.Set(1.0f, 4.0f);
     //ball = new b2Body* body;
     ball = world->CreateBody(&bodyDef);
 
@@ -111,8 +111,12 @@ void draw(void)
 
     world->Step(timeStep, velocityIterations, positionIterations);
 
+    b2Fixture* F = ball->GetFixtureList();
+    b2CircleShape* circle = (b2CircleShape*) F->GetShape();                     
+
     b2Vec2 position = ball->GetPosition();
-    float32 angle = ball->GetAngle();
+    //float32 angle = ball->GetAngle();
+    drawCircle(circle,position);
     //printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
     //drawCircle(position.x, position.y,angle);
     //
@@ -137,14 +141,17 @@ void draw(void)
 
 void drawCircle(b2CircleShape *circle, b2Vec2 position){
 
+    printf("DrawCircle \n");
     float32 x = position.x;
     float32 y = position.y;
     float32 r = circle->m_radius;
 
     //give color->red
-    glColor3f(1.0,0.0,0.0)
+    glColor3f(1.0,1.0,0.0);
     glBegin(GL_TRIANGLE_FAN);
     glVertex2f(x, y);
+
+    int subdivs = 64;
 
     for( unsigned int i = 0.0f; i <= subdivs; ++i ) {
         float angle = i * ((2.0f * 3.14159f) / subdivs);
