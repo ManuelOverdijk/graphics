@@ -18,6 +18,11 @@
 
 #include "levels.h"
 
+
+void drawCircle(unsigned int level);
+
+
+
 unsigned int reso_x = 800, reso_y = 600; // Window size in pixels
 const float world_x = 8.f, world_y = 6.f; // Level (world) size in meters
 
@@ -27,6 +32,9 @@ int frame_count;
 // Information about the levels loaded from files will be available in these.
 unsigned int num_levels;
 level_t *levels;
+
+b2World *world;
+b2Body *ball;
 
 
 /*
@@ -51,52 +59,33 @@ void load_world(unsigned int level)
     b2Vec2 gravity(0.0f, -10.0f);
 
     //create our b2World
-    b2World world(gravity);
+    world = new b2World(gravity);
 
-    //create a single static body
-    b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(0.0f, -10.0f);
-    b2Body* groundBody = world.CreateBody(&groundBodyDef);
+    // //create a single static body
+    // b2BodyDef groundBodyDef;
+    // groundBodyDef.position.Set(0.0f, -10.0f);
+    // b2Body* groundBody = world.CreateBody(&groundBodyDef);
 
-    b2PolygonShape groundBox;
-    groundBox.SetAsBox(50.0f, 10.0f);
-    groundBody->CreateFixture(&groundBox, 0.0f);
+    // b2PolygonShape groundBox;
+    // groundBox.SetAsBox(50.0f, 10.0f);
+    // groundBody->CreateFixture(&groundBox, 0.0f);
     
     //create a single dynamic body
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(0.0f, 4.0f);
-    b2Body* body = world.CreateBody(&bodyDef);
+    //ball = new b2Body* body;
+    ball = world->CreateBody(&bodyDef);
 
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(1.0f, 1.0f);
+    b2CircleShape circleShape;
+    circleShape.m_radius = 0.4;
+    
 
     b2FixtureDef fixtureDef;
-    fixtureDef.shape = &dynamicBox;
+    fixtureDef.shape = &circleShape;
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 0.3f;
-    body->CreateFixture(&fixtureDef);
-
-    //maybe in draw()?
-    float32 timeStep = 1.0f / 60.0f;
-    int32 velocityIterations = 6;
-    int32 positionIterations = 2;
-
-    for (int32 i = 0; i < 60; ++i)
-    {
-
-        world.Step(timeStep, velocityIterations, positionIterations);
-
-        b2Vec2 position = body->GetPosition();
-
-        float32 angle = body->GetAngle();
-
-        //DrawCircle
-        drawCircle();
-        printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
-
-    }
-
+    ball->CreateFixture(&fixtureDef);
 
 }
 
@@ -111,16 +100,24 @@ void draw(void)
     int frametime = time - last_time;
     frame_count++;
 
+    float32 timeStep = 1.0f / 60.0f;
+    int32 velocityIterations = 8;
+    int32 positionIterations = 3;
+
     // Clear the buffer
     glColor3f(0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
 
 
+    world->Step(timeStep, velocityIterations, positionIterations);
+
+    b2Vec2 position = ball->GetPosition();
+    float32 angle = ball->GetAngle();
+    //printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
+    //drawCircle(position.x, position.y,angle);
     //
     // Do any logic and drawing here.
     //
-
-
     // Show rendered frame
     glutSwapBuffers();
 
@@ -138,9 +135,23 @@ void draw(void)
 
 }
 
+void drawCircle(b2CircleShape *circle, b2Vec2 position){
 
-void drawCircle(void level) {
-    
+    float32 x = position.x;
+    float32 y = position.y;
+    float32 r = circle->m_radius;
+
+    //give color->red
+    glColor3f(1.0,0.0,0.0)
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(x, y);
+
+    for( unsigned int i = 0.0f; i <= subdivs; ++i ) {
+        float angle = i * ((2.0f * 3.14159f) / subdivs);
+        glVertex2f(x + r * cos(angle), y + r * sin(angle) );
+    }
+
+    glEnd();
 }
 
 /*
