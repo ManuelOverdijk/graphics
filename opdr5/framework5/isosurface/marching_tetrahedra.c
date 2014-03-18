@@ -25,24 +25,28 @@ interpolate_points(unsigned char isovalue, vec3 p1, vec3 p2, unsigned char v1, u
 
   /* tries to interpolate the points */
   vec3 interpolate;
-  // double interpolate_value1 = fabs(isovalue - v2) / fabs(v2 - v1);
-  // double interpolate_value2 = fabs(isovalue - v1) / fabs(v2 - v1);
-  // double interpolate_weight1 = interpolate_value1;
-  // double interpolate_weight2 = interpolate_value2;
-  // interpolate = v3_add(v3_multiply(p1, fabs(isovalue - v2) / fabs(v2 - v1)), v3_multiply(p2, fabs(isovalue - v1) / fabs(v2 - v1)));
 
-  // if(fabs(isovalue - v1) < fabs(isovalue - v2))
-  // {
-  //      interpolate = v3_add(v3_multiply(p1, 0.75), v3_multiply(p2, 0.25));
-  // }
-  // else
-  // {
-  //      interpolate = v3_add(v3_multiply(p1, 0.25), v3_multiply(p2, 0.75));
+  /* End points */
+  double interpolate_value1 = fabs(isovalue - v2) / fabs(v2 - v1);
+  double interpolate_value2 = fabs(isovalue - v1) / fabs(v2 - v1);
 
-  // }
-   interpolate = v3_add(v3_multiply(p1, 0.5), v3_multiply(p2, 0.5));
+  double interpolate_weight1 = interpolate_value1;
+  double interpolate_weight2 = interpolate_value2;
+
+  interpolate = v3_add(v3_multiply(p1, fabs(isovalue - v2) / fabs(v2 - v1)),
+   v3_multiply(p2, fabs(isovalue - v1) / fabs(v2 - v1)));
 
 
+  if(fabs(isovalue - v1) < fabs(isovalue - v2))
+  {
+       interpolate = v3_add(v3_multiply(p1, 0.75), v3_multiply(p2, 0.25));
+  }
+  else
+  {
+       interpolate = v3_add(v3_multiply(p1, 0.25), v3_multiply(p2, 0.75));
+
+  }
+    //interpolate = v3_add(v3_multiply(p1, 0.5), v3_multiply(p2, 0.5));
 
     return interpolate;
 }
