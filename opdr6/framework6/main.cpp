@@ -44,7 +44,60 @@ void load_world(unsigned int level)
     }
 
     // Create a Box2D world and populate it with all bodies for this level
+    //gravity
     // (including the ball).
+
+    //gravity
+    b2Vec2 gravity(0.0f, -10.0f);
+
+    //create our b2World
+    b2World world(gravity);
+
+    //create a single static body
+    b2BodyDef groundBodyDef;
+    groundBodyDef.position.Set(0.0f, -10.0f);
+    b2Body* groundBody = world.CreateBody(&groundBodyDef);
+
+    b2PolygonShape groundBox;
+    groundBox.SetAsBox(50.0f, 10.0f);
+    groundBody->CreateFixture(&groundBox, 0.0f);
+    
+    //create a single dynamic body
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(0.0f, 4.0f);
+    b2Body* body = world.CreateBody(&bodyDef);
+
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(1.0f, 1.0f);
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &dynamicBox;
+    fixtureDef.density = 1.0f;
+    fixtureDef.friction = 0.3f;
+    body->CreateFixture(&fixtureDef);
+
+    //maybe in draw()?
+    float32 timeStep = 1.0f / 60.0f;
+    int32 velocityIterations = 6;
+    int32 positionIterations = 2;
+
+    for (int32 i = 0; i < 60; ++i)
+    {
+
+        world.Step(timeStep, velocityIterations, positionIterations);
+
+        b2Vec2 position = body->GetPosition();
+
+        float32 angle = body->GetAngle();
+
+        //DrawCircle
+        drawCircle();
+        printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
+
+    }
+
+
 }
 
 
@@ -82,6 +135,12 @@ void draw(void)
         last_time = time;
         frame_count = 0;
     }
+
+}
+
+
+void drawCircle(void level) {
+    
 }
 
 /*
