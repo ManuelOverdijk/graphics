@@ -21,9 +21,7 @@
 
 void drawCircle(b2CircleShape *circle, b2Vec2 position);
 void drawWorld();
-void drawPolygon();
-
-
+void drawPolygon(b2PolygonShape *poly, b2Vec2 position);
 
 unsigned int reso_x = 800, reso_y = 600; // Window size in pixels
 const float world_x = 8.f, world_y = 6.f; // Level (world) size in meters
@@ -58,7 +56,7 @@ void load_world(unsigned int level)
     // (including the ball).
 
     //gravity
-    b2Vec2 gravity(0.0f, -10.0f);
+    b2Vec2 gravity(0.0f, -1.0f);
 
     //create our b2World
     world = new b2World(gravity);
@@ -75,18 +73,17 @@ void load_world(unsigned int level)
     //create a single dynamic body
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(1.0f, 4.0f);
+    bodyDef.position.Set(4.0f, 4.0f);
     ball = world->CreateBody(&bodyDef);
 
     b2CircleShape circleShape;
-    circleShape.m_radius = 0.4;
+    circleShape.m_radius = 0.3;
     
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &circleShape;
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 0.3f;
     ball->CreateFixture(&fixtureDef);
-
 }
 
 
@@ -100,7 +97,7 @@ void draw(void)
     int frametime = time - last_time;
     frame_count++;
 
-    float32 timeStep = 1.0f / 60.0f;
+    float32 timeStep = 1.0f / 600.0f;
     int32 velocityIterations = 8;
     int32 positionIterations = 3;
 
@@ -115,7 +112,7 @@ void draw(void)
     b2CircleShape* circle = (b2CircleShape*) F->GetShape();                     
 
     b2Vec2 position = ball->GetPosition();
-    //float32 angle = ball->GetAngle();
+    float32 angle = ball->GetAngle();
     drawCircle(circle,position);
     drawWorld();
     //
@@ -142,33 +139,34 @@ void drawWorld(){
     b2Body *body;
     b2Fixture *fixture;
 
+    //Add functionallity for more fixtures on one rigid body
     for (body = world->GetBodyList(); body; body = body->GetNext()) {
         fixture = body->GetFixtureList();
 
         b2Shape::Type shapeType = fixture->GetType();
-        if ( shapeType == b2Shape::e_circle )
+        if (shapeType == b2Shape::e_circle )
         {
             b2CircleShape* circleShape = (b2CircleShape*)fixture->GetShape();
-            printf("Circle \n");
+            drawCircle(circleShape,body->GetPosition());
         }
-        else if ( shapeType == b2Shape::e_polygon )
+        else if (shapeType == b2Shape::e_polygon )
         {
             b2PolygonShape* polygonShape = (b2PolygonShape*)fixture->GetShape();
-            printf("Polygon \n");
+            drawPolygon(polygonShape, body->GetPosition());
         }
 
     }
-    exit(0);
 
 }
 
-void drawPolygon() {
+void drawPolygon(b2PolygonShape *poly, b2Vec2 position) {
+    
 
 }
 
 void drawCircle(b2CircleShape *circle, b2Vec2 position){
 
-    printf("DrawCircle \n");
+    //printf("DrawCircle \n");
     float32 x = position.x;
     float32 y = position.y;
     float32 r = circle->m_radius;
